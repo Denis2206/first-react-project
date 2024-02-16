@@ -98,20 +98,24 @@ const ToDoList = () => {
                 //     const priorityOrder = {Low: 1, Medium: 2, High: 0};
                 //     return priorityOrder[a.priority] - priorityOrder[b.priority];
                 // }
-                let priorityOrder;
-                switch(sortPriority){
-                    case "Low": priorityOrder = {Low: 0, Medium: 1, High: 2};
-                    return priorityOrder[a.priority] - priorityOrder[b.priority];
 
-                    case "Medium": priorityOrder = {Low: 1, Medium: 0, High: 2};
-                    return priorityOrder[a.priority] - priorityOrder[b.priority];
+                // let priorityOrder;
+                // switch(sortPriority){
+                //     case "Low": priorityOrder = {Low: 0, Medium: 1, High: 2};
+                //     return priorityOrder[a.priority] - priorityOrder[b.priority];
 
-                    case "High": priorityOrder = {Low: 1, Medium: 2, High: 0};
-                    return priorityOrder[a.priority] - priorityOrder[b.priority];
+                //     case "Medium": priorityOrder = {Low: 1, Medium: 0, High: 2};
+                //     return priorityOrder[a.priority] - priorityOrder[b.priority];
+
+                //     case "High": priorityOrder = {Low: 1, Medium: 2, High: 0};
+                //     return priorityOrder[a.priority] - priorityOrder[b.priority];
                     
-                    default: priorityOrder = {Low: 0, Medium: 0, High: 0};
-                    return priorityOrder[a.priority] - priorityOrder[b.priority];
-                }
+                //     default: priorityOrder = {Low: 0, Medium: 0, High: 0};
+                //     return priorityOrder[a.priority] - priorityOrder[b.priority];
+                // }
+                let priorityOrder;
+                sortPriority === "Low" ? priorityOrder = {Low: 0, Medium: 1, High: 2} : sortPriority === "Medium" ? priorityOrder = {Low: 1, Medium: 0, High: 2} : priorityOrder = {Low: 1, Medium: 2, High: 0};
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
             });
             setTodos(sortedTodos);
 
