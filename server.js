@@ -37,9 +37,9 @@ app.post("/api/todos", async (req, res) => {
     // todos.push(newTodo);
     try {
         // const newTodo = req.body.todo;
-        const {todo, priority, deadline} = req.body;
+        const {todo, description, priority, deadline} = req.body;
         // await db.collection(collection_name).insertOne({todo: newTodo});
-        await db.collection(collection_name).insertOne({todo, priority, deadline});
+        await db.collection(collection_name).insertOne({todo, description, priority, deadline});
         res.json({message: "ToDo added succesfully"});
     } catch (error) {
         console.error("Error adding todos: ", error);
