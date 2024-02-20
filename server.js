@@ -47,6 +47,24 @@ app.post("/api/todos", async (req, res) => {
     }
 });
 
+// изменение задачи
+app.put("/api/todos", async (req, res) => {
+    try {
+        const {id, todo, description, priority, deadline} = req.body;
+        // console.log("id " + id);
+        // console.log("todo " + todo);
+        // console.log("description " + description);
+        // console.log("priority " + priority);
+        // console.log("deadline " + deadline);
+        const objId = new ObjectId(id);
+        await db.collection(collection_name).updateOne({_id: objId},{$set: {todo: todo, description: description, priority: priority, deadline: deadline}});
+        res.json({message: "ToDo updated succesfully"});
+    } catch (error) {
+        console.error("Error update todos: ", error);
+        res.status(500).json({message: "Error update todos"});
+    }
+});
+
 // удаление
 // app.delete("/api/todos/:index", (req, res) => {
 app.delete("/api/todos/:id", async (req, res) => {

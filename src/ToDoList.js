@@ -9,8 +9,9 @@ const ToDoList = () => {
     const [description, setDescription] = useState(""); // описание задачи
     const [sortPriority, setSortPriority] = useState("Low"); // сортировка по приоритету
     const [editing, setEditing] = useState(false); // открыта ли форма изменения
-    const [selectedTodo, setSelectedTodo] = useState(null);//выбранная задача
+    const [selectedTodo, setSelectedTodo] = useState(null); //выбранная задача
 
+    const [id, setId] = useState("");
     // загрузка задач из locarstorage при запуске приложения
     // useEffect(() => {
     //     const savedTodos = localStorage.getItem("todos");
@@ -29,7 +30,7 @@ const ToDoList = () => {
             //     const priorityOrder = {Low: 0, Medium: 1, High: 2};
             //     // return priorityOrder[a.priority] - priorityOrder[b.priority];
             //     // return (priorityOrder[a.priority] - priorityOrder[b.priority]) * (sortPriority === "High" ? -1 : 1);
-                
+
             //     // if (sortPriority === "Low") {
             //     //     return priorityOrder[a.priority] - priorityOrder[b.priority] - priorityOrder[c.priority];
             //     // }
@@ -44,7 +45,7 @@ const ToDoList = () => {
             //         console.log("a " + a);
             //         console.log("b " + b);
             //         console.log("c " + c);
-            //         return priorityOrder[a.priority] - priorityOrder[b.priority];                    
+            //         return priorityOrder[a.priority] - priorityOrder[b.priority];
             //         // return 1;
             //     }
             //     if (sortPriority === "Medium") {
@@ -55,7 +56,7 @@ const ToDoList = () => {
             //         return priorityOrder[c.priority] - priorityOrder[a.priority];
             //         // return 0;
             //     }
-                
+
             //     // return (priorityOrder[a.priority] - priorityOrder[b.priority]) * (sortPriority === "High" ? -1 : 1);
             // });
             // setTodos(response.data);
@@ -109,12 +110,16 @@ const ToDoList = () => {
 
                 //     case "High": priorityOrder = {Low: 1, Medium: 2, High: 0};
                 //     return priorityOrder[a.priority] - priorityOrder[b.priority];
-                    
+
                 //     default: priorityOrder = {Low: 0, Medium: 0, High: 0};
                 //     return priorityOrder[a.priority] - priorityOrder[b.priority];
                 // }
                 let priorityOrder;
-                sortPriority === "Low" ? priorityOrder = {Low: 0, Medium: 1, High: 2} : sortPriority === "Medium" ? priorityOrder = {Low: 1, Medium: 0, High: 2} : priorityOrder = {Low: 1, Medium: 2, High: 0};
+                sortPriority === "Low"
+                    ? (priorityOrder = {Low: 0, Medium: 1, High: 2})
+                    : sortPriority === "Medium"
+                    ? (priorityOrder = {Low: 1, Medium: 0, High: 2})
+                    : (priorityOrder = {Low: 1, Medium: 2, High: 0});
                 return priorityOrder[a.priority] - priorityOrder[b.priority];
             });
             setTodos(sortedTodos);
@@ -138,6 +143,8 @@ const ToDoList = () => {
 
     const handleDescriptionChange = (event) => setDescription(event.target.value);
 
+    // const handleIdChange = (event) => setId(event.target.value);
+
     const handleSortPriorityChange = (event) => {
         setSortPriority(event.target.value);
         // const sortedTodos = todos.sort((a, b, c) => {
@@ -160,26 +167,83 @@ const ToDoList = () => {
         //     setTodos([...todos, inputValue]);
         //     setInputValue("");
         // }
-        try {
-            await axios.post("http://localhost:8888/api/todos", {
-                todo: inputValue,
-                description: description,
-                priority: priority,
-                deadline: deadline,
-            });
-            fetchToDos();
-            setInputValue("");
-            setPriority("Low");
-            setDeadline("");
-        } catch (error) {
-            console.error("Error adding todo: ", error);
+
+        if(editing === false){
+            try {
+                await axios.post("http://localhost:8888/api/todos", {
+                    todo: inputValue,
+                    description: description,
+                    priority: priority,
+                    deadline: deadline,
+                });
+                fetchToDos();
+                setInputValue("");
+                setPriority("Low");
+                setDeadline("");
+                setDescription("");
+            } catch (error) {
+                console.error("Error adding todo: ", error);
+            }
+        }
+        else {
+            try {
+                await axios.put("http://localhost:8888/api/todos/", {
+                    id: id,
+                    todo: inputValue,
+                    description: description,
+                    priority: priority,
+                    deadline: deadline,
+                });
+
+                fetchToDos();
+                setEditing(false);
+                setInputValue("");
+                setPriority("Low");
+                setDeadline("");
+                setDescription("");
+            } catch (error) {
+                console.error("Error update todo: ", error.response.data);
+            }
         }
     };
 
-    const handleEditToDo = (todo) => {
-        setSelectedTodo(todo);
-        setEditing(true);
-    }
+    // const handleSetId = (id) => {
+    //     setId(id);
+    // }
+
+    const handleEditToDo = async (todo) => {
+
+        // console.log(todo._id);
+        // if(editing === true){
+        //     try {
+        //         await axios.put("http://localhost:8888/api/todos/", {
+        //             id: todo._id,
+        //             todo: inputValue,
+        //             description: description,
+        //             priority: priority,
+        //             deadline: deadline,
+        //         });
+
+        //         fetchToDos();
+        //         setEditing(false);
+        //         setInputValue("");
+        //         setPriority("Low");
+        //         setDeadline("");
+        //         setDescription("");
+        //     } catch (error) {
+        //         console.error("Error update todo: ", error.response.data);
+        //     }
+        // }
+        // else {
+            // setSelectedTodo(todo);
+            setId(todo._id);
+            setInputValue(todo.todo);
+            setPriority(todo.priority);
+            setDeadline(todo.deadline);
+            setDescription(todo.description);
+            setEditing(true);
+        // }
+    };
 
     // const handleDeleteToDo = async(index) => {
     const handleDeleteToDo = async (id) => {
@@ -209,6 +273,17 @@ const ToDoList = () => {
                 return "table-light";
         }
     };
+
+    function formatDateTime(date) {
+        var options = {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        };
+        var localDate = new Date(date);
+        return localDate.toLocaleString("ru", options);
+    }
 
     return (
         <div className="container">
@@ -273,10 +348,15 @@ const ToDoList = () => {
                 <tbody>
                     {todos.map((todo) => (
                         <tr key={todo._id} className={getPriorityColor(todo.priority)}>
+                        {/* <div hidden={true}  >{todo._id}</div> */}
                             <td>{todo.todo}</td>
                             <td>{todo.description}</td>
-                            <td style={{width: "20%"}}>{todo.deadline}</td>
-                            <td>
+                            {/* <td style={{width: "20%"}}>{todo.deadline}</td> */}
+                            <td style={{width: "20%"}}>{formatDateTime(todo.deadline)}</td>
+                            <td style={{width: "20%"}}>
+                                <button className="btn btn-outline-primary me-4" onClick={() => handleEditToDo(todo)}>
+                                    Update
+                                </button>
                                 <button className="btn btn-outline-danger" onClick={() => handleDeleteToDo(todo._id)}>
                                     Delete
                                 </button>
