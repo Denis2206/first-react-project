@@ -26,65 +26,6 @@ const ToDoList = () => {
     const fetchToDos = async () => {
         try {
             const response = await axios.get("http://localhost:8888/api/todos");
-            // const sortedTodos = response.data.sort((a, b, c) => {
-            //     const priorityOrder = {Low: 0, Medium: 1, High: 2};
-            //     // return priorityOrder[a.priority] - priorityOrder[b.priority];
-            //     // return (priorityOrder[a.priority] - priorityOrder[b.priority]) * (sortPriority === "High" ? -1 : 1);
-
-            //     // if (sortPriority === "Low") {
-            //     //     return priorityOrder[a.priority] - priorityOrder[b.priority] - priorityOrder[c.priority];
-            //     // }
-            //     // if (sortPriority === "Medium") {
-            //     //     return priorityOrder[b.priority] - priorityOrder[a.priority] - priorityOrder[c.priority];
-            //     // }
-            //     // if (sortPriority === "High") {
-            //     //     return priorityOrder[c.priority] - priorityOrder[a.priority] - priorityOrder[b.priority];
-            //     // }
-
-            //     if (sortPriority === "Low") {
-            //         console.log("a " + a);
-            //         console.log("b " + b);
-            //         console.log("c " + c);
-            //         return priorityOrder[a.priority] - priorityOrder[b.priority];
-            //         // return 1;
-            //     }
-            //     if (sortPriority === "Medium") {
-            //         return priorityOrder[b.priority] - priorityOrder[a.priority];
-            //         // return -1;
-            //     }
-            //     if (sortPriority === "High") {
-            //         return priorityOrder[c.priority] - priorityOrder[a.priority];
-            //         // return 0;
-            //     }
-
-            //     // return (priorityOrder[a.priority] - priorityOrder[b.priority]) * (sortPriority === "High" ? -1 : 1);
-            // });
-            // setTodos(response.data);
-            // const unSortedTodos = response.data;
-            // console.log("unSortedTodos " + unSortedTodos.map(item => item.priority));
-            // console.log("unSortedTodos " + Object.values(unSortedTodos));
-            // console.log("todos " + todos.map(item => item.priority));
-            // if(sortPriority === "Low"){
-            //     const sortedTodos = response.data.sort((a, b) => {
-            //         const priorityOrder = {Low: 0, Medium: 1, High: 2};
-            //         return priorityOrder[a.priority] - priorityOrder[b.priority];
-            //     });
-            //     setTodos(sortedTodos);
-            // }
-            // if(sortPriority === "Medium"){
-            //     const sortedTodos = response.data.sort((a, b) => {
-            //         const priorityOrder = {Low: 0, Medium: 1, High: 2};
-            //         return priorityOrder[a.priority] - priorityOrder[b.priority];
-            //     });
-            //     setTodos(sortedTodos);
-            // }
-            // if(sortPriority === "High"){
-            //     const sortedTodos = response.data.sort((a, b) => {
-            //         const priorityOrder = {Low: 0, Medium: 1, High: 2};
-            //         return priorityOrder[a.priority] - priorityOrder[b.priority];
-            //     });
-            //     setTodos(sortedTodos);
-            // }
 
             const sortedTodos = response.data.sort((a, b) => {
                 // if(sortPriority === "Low"){
@@ -147,17 +88,6 @@ const ToDoList = () => {
 
     const handleSortPriorityChange = (event) => {
         setSortPriority(event.target.value);
-        // const sortedTodos = todos.sort((a, b, c) => {
-        //     const priorityOrder = {Low: 0, Medium: 1, High: 2};
-        //     if(priority === "Low"){
-        //         return priorityOrder[a.priority] - priorityOrder[b.priority];
-        //     }
-        //     else if(priority === "Medium"){
-        //         return priorityOrder[b.priority] - priorityOrder[a.priority];
-        //     }
-        //     return priorityOrder[c.priority] - priorityOrder[a.priority];
-        // });
-        // setTodos(sortedTodos);
     };
 
     const handleAddToDo = async () => {
